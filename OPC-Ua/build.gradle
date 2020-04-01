@@ -1,0 +1,43 @@
+apply plugin: 'java'
+apply plugin: 'jacoco'
+apply plugin: 'application'
+
+group = 'x.opcua'
+sourceCompatibility = 1.11
+
+mainClassName = 'x.opcua.OpcUaMain'
+
+application {
+  mainClassName 'x.opcua.OpcUaMain'
+}
+
+repositories {
+  jcenter()
+  mavenCentral()
+}
+
+dependencies {
+  testImplementation 'junit:junit:4.13'
+  compile 'com.fasterxml.jackson.core:jackson-core:2.10.3'
+  compile 'com.fasterxml.jackson.core:jackson-databind:2.10.3'
+  compile 'org.bouncycastle:bcpkix-jdk15on:1.64'
+  compile 'org.bouncycastle:bcprov-jdk15on:1.64'
+  compile group: 'org.eclipse.milo', name: 'sdk-server', version: '0.3.8'
+  compile group: 'org.eclipse.milo', name: 'sdk-client', version: '0.3.8'
+  compile group: 'org.eclipse.milo', name: 'server-examples', version: '0.3.8'
+}
+
+jar {
+  manifest {
+    attributes(
+      'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+      'Main-Class': 'x.mqtt.MqttMain'
+    )
+  }
+  from (configurations.compile.collect { entry -> zipTree(entry) }) {
+    exclude 'META-INF/MANIFEST.MF'
+    exclude 'META-INF/*.SF'
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+  }
+}
