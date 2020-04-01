@@ -24,11 +24,11 @@ import org.slf4j.LoggerFactory;
 
 import static org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.Unsigned.uint;
 
-public class OPCUAClient implements OPCUAClientInterface {
+public class OPCUAClientSubscription implements OPCUAClientInterface {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
-  public OPCUAClient(boolean exampleServer) {
+  public OPCUAClientSubscription(boolean exampleServer) {
     try {
       new OPCUAClientRunner(this, exampleServer).run();
     } catch (Exception ex) {

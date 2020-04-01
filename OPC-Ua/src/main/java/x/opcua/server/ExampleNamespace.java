@@ -7,9 +7,6 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import org.eclipse.milo.examples.server.methods.GenerateEventMethod;
-import org.eclipse.milo.examples.server.methods.SqrtMethod;
-import org.eclipse.milo.examples.server.types.CustomDataType;
 import org.eclipse.milo.opcua.sdk.core.AccessLevel;
 import org.eclipse.milo.opcua.sdk.core.Reference;
 import org.eclipse.milo.opcua.sdk.core.ValueRank;
@@ -52,6 +49,9 @@ import static org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.Unsigned.
 import static org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.Unsigned.uint;
 import static org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.Unsigned.ulong;
 import static org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.Unsigned.ushort;
+import x.opcua.server.methods.GenerateEventMethod;
+import x.opcua.server.methods.SqrtMethod;
+import x.opcua.server.types.CustomDataType;
 
 public class ExampleNamespace extends ManagedNamespace {
 
@@ -124,39 +124,22 @@ public class ExampleNamespace extends ManagedNamespace {
     // Create a "HelloWorld" folder and add it to the node manager
     NodeId folderNodeId = newNodeId("HelloWorld");
 
-    UaFolderNode folderNode = new UaFolderNode(
-            getNodeContext(),
-            folderNodeId,
-            newQualifiedName("HelloWorld"),
-            LocalizedText.english("HelloWorld")
-    );
+    UaFolderNode folderNode = new UaFolderNode(getNodeContext(), folderNodeId, newQualifiedName("HelloWorld"), LocalizedText.english("HelloWorld"));
 
     getNodeManager().addNode(folderNode);
 
     // Make sure our new folder shows up under the server's Objects folder.
-    folderNode.addReference(new Reference(
-            folderNode.getNodeId(),
-            Identifiers.Organizes,
-            Identifiers.ObjectsFolder.expanded(),
-            false
-    ));
+    folderNode.addReference(new Reference(folderNode.getNodeId(), Identifiers.Organizes, Identifiers.ObjectsFolder.expanded(), false));
 
     // Add the rest of the nodes
     addVariableNodes(folderNode);
-
     addSqrtMethod(folderNode);
-
     addGenerateEventMethod(folderNode);
-
     addCustomDataTypeVariable(folderNode);
-
     addCustomObjectTypeAndInstance(folderNode);
 
     // Set the EventNotifier bit on Server Node for Events.
-    UaNode serverNode = getServer()
-            .getAddressSpaceManager()
-            .getManagedNode(Identifiers.Server)
-            .orElse(null);
+    UaNode serverNode = getServer().getAddressSpaceManager().getManagedNode(Identifiers.Server).orElse(null);
 
     if (serverNode instanceof ServerNode) {
       ((ServerNode) serverNode).setEventNotifier(ubyte(1));
@@ -164,11 +147,7 @@ public class ExampleNamespace extends ManagedNamespace {
       // Post a bogus Event every couple seconds
       getServer().getScheduledExecutorService().scheduleAtFixedRate(() -> {
         try {
-          BaseEventNode eventNode = getServer().getEventFactory().createEvent(
-                  newNodeId(UUID.randomUUID()),
-                  Identifiers.BaseEventType
-          );
-
+          BaseEventNode eventNode = getServer().getEventFactory().createEvent(newNodeId(UUID.randomUUID()), Identifiers.BaseEventType);
           eventNode.setBrowseName(new QualifiedName(1, "foo"));
           eventNode.setDisplayName(LocalizedText.english("foo"));
           eventNode.setEventId(ByteString.of(new byte[]{0, 1, 2, 3}));
@@ -201,12 +180,7 @@ public class ExampleNamespace extends ManagedNamespace {
   }
 
   private void addArrayNodes(UaFolderNode rootNode) {
-    UaFolderNode arrayTypesFolder = new UaFolderNode(
-            getNodeContext(),
-            newNodeId("HelloWorld/ArrayTypes"),
-            newQualifiedName("ArrayTypes"),
-            LocalizedText.english("ArrayTypes")
-    );
+    UaFolderNode arrayTypesFolder = new UaFolderNode(getNodeContext(), newNodeId("HelloWorld/ArrayTypes"), newQualifiedName("ArrayTypes"), LocalizedText.english("ArrayTypes"));
 
     getNodeManager().addNode(arrayTypesFolder);
     rootNode.addOrganizes(arrayTypesFolder);
