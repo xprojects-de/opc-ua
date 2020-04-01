@@ -24,6 +24,7 @@ dependencies {
   compile 'org.bouncycastle:bcprov-jdk15on:1.64'
   compile group: 'org.eclipse.milo', name: 'sdk-server', version: '0.3.8'
   compile group: 'org.eclipse.milo', name: 'sdk-client', version: '0.3.8'
+  compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
   compile group: 'org.eclipse.milo', name: 'server-examples', version: '0.3.8'
 }
 

@@ -28,9 +28,9 @@ public class OPCUAClient implements OPCUAClientInterface {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
-  public OPCUAClient() {
+  public OPCUAClient(boolean exampleServer) {
     try {
-      new OPCUAClientRunner(this).run();
+      new OPCUAClientRunner(this, exampleServer).run();
     } catch (Exception ex) {
       ex.printStackTrace();
     }
