@@ -123,11 +123,8 @@ public class ExampleNamespace extends ManagedNamespace {
 
     // Create a "HelloWorld" folder and add it to the node manager
     NodeId folderNodeId = newNodeId("HelloWorld");
-
     UaFolderNode folderNode = new UaFolderNode(getNodeContext(), folderNodeId, newQualifiedName("HelloWorld"), LocalizedText.english("HelloWorld"));
-
     getNodeManager().addNode(folderNode);
-
     // Make sure our new folder shows up under the server's Objects folder.
     folderNode.addReference(new Reference(folderNode.getNodeId(), Identifiers.Organizes, Identifiers.ObjectsFolder.expanded(), false));
 

@@ -99,11 +99,7 @@ public class ExampleServer {
             .orElseThrow(() -> new UaRuntimeException(StatusCodes.Bad_ConfigurationError, "no certificate found"));
 
     // The configured application URI must match the one in the certificate(s)
-    String applicationUri = CertificateUtil
-            .getSanUri(certificate)
-            .orElseThrow(() -> new UaRuntimeException(
-            StatusCodes.Bad_ConfigurationError,
-            "certificate is missing the application URI"));
+    String applicationUri = CertificateUtil.getSanUri(certificate).orElseThrow(() -> new UaRuntimeException(StatusCodes.Bad_ConfigurationError, "certificate is missing the application URI"));
 
     Set<EndpointConfiguration> endpointConfigurations = createEndpointConfigurations(certificate);
 
