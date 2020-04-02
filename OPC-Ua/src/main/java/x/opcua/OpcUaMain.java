@@ -16,9 +16,9 @@ public class OpcUaMain {
     Runtime.getRuntime().addShutdownHook(new Thread(() -> future.complete(null)));
 
     //OPCUAClientSubscription c = new OPCUAClientSubscription(false);
-    //OPCUAClientMethod m = new OPCUAClientMethod(false);
+    OPCUAClientMethod m = new OPCUAClientMethod(false);
     //OPCUAClientBrowser b = new OPCUAClientBrowser(false);
-    OPCUAClientTrigger b = new OPCUAClientTrigger(false);
+    //OPCUAClientTrigger b = new OPCUAClientTrigger(false);
 
     future.get();
   }
