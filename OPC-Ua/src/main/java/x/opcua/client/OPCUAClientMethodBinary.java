@@ -32,17 +32,18 @@ public class OPCUAClientMethodBinary implements OPCUAClientInterface {
     client.connect().get();
 
     // call the sqrt(x) function
-    int loops = 20000;
-    int size = 1024 * 1024;
+    int loops = 1000;
+    int size = (1024 * 1024);
 
     long startTime = System.currentTimeMillis();
     for (int k = 1; k < loops; k++) {
-      sqrt(client, size, k, startTime).exceptionally(ex -> {
-        logger.error("error invoking binaryData()", ex);
-        return null;
-      }).thenAccept(v -> {        
-        logger.info("binaryData()={}", v.length());
-      });
+      startTime = System.currentTimeMillis();
+      CompletableFuture<ByteString> req = sqrt(client, size, k, startTime);
+      ByteString v = req.get();
+      if (v != null) {
+        long elapsed = System.currentTimeMillis() - startTime;
+        logger.info("EL (" + k + "): " + elapsed + " datalength: " + v.length());
+      }
     }
     future.complete(client);
   }
@@ -53,20 +54,11 @@ public class OPCUAClientMethodBinary implements OPCUAClientInterface {
     CallMethodRequest request = new CallMethodRequest(objectId, methodId, new Variant[]{new Variant(input)});
     return client.call(request).thenCompose(result -> {
       StatusCode statusCode = result.getStatusCode();
-      long elapsed = System.currentTimeMillis() - startTime;
-      double elapsed_single = (double) elapsed / (double) counter;
-      logger.info("EL (" + counter + "): " + elapsed + " ELG (S): " + elapsed_single);
       if (statusCode.isGood()) {
         ByteString value = (ByteString) l(result.getOutputArguments()).get(0).getValue();
         return CompletableFuture.completedFuture(value);
       } else {
-        StatusCode[] inputArgumentResults = result.getInputArgumentResults();
-        for (int i = 0; i < inputArgumentResults.length; i++) {
-          logger.error("inputArgumentResults[{}]={}", i, inputArgumentResults[i]);
-        }
-        CompletableFuture<ByteString> f = new CompletableFuture<>();
-        f.completeExceptionally(new UaException(statusCode));
-        return f;
+        return null;
       }
     });
   }
