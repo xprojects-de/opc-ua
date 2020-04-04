@@ -98,7 +98,7 @@ public class OPCUAClientRunner {
             .setKeyPair(loader.getClientKeyPair())
             .setEndpoint(endpoint)
             .setIdentityProvider(clientExample.getIdentityProvider())
-            .setRequestTimeout(uint(5000))
+            .setRequestTimeout(uint(50000))
             .build();
 
     return OpcUaClient.create(config);

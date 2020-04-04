@@ -3,6 +3,7 @@ package x.opcua;
 import java.util.concurrent.CompletableFuture;
 import x.opcua.client.OPCUAClientBrowser;
 import x.opcua.client.OPCUAClientMethod;
+import x.opcua.client.OPCUAClientMethodBinary;
 import x.opcua.client.OPCUAClientSubscription;
 import x.opcua.client.OPCUAClientTrigger;
 import x.opcua.server.ExampleServer;
@@ -16,8 +17,9 @@ public class OpcUaMain {
     Runtime.getRuntime().addShutdownHook(new Thread(() -> future.complete(null)));
 
     //OPCUAClientSubscription c = new OPCUAClientSubscription(false);
-    OPCUAClientMethod m = new OPCUAClientMethod(false);
+    // OPCUAClientMethod m = new OPCUAClientMethod(false);
     //OPCUAClientBrowser b = new OPCUAClientBrowser(false);
+    OPCUAClientMethodBinary m = new OPCUAClientMethodBinary(false);
     //OPCUAClientTrigger b = new OPCUAClientTrigger(false);
 
     future.get();

@@ -49,6 +49,7 @@ import static org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.Unsigned.
 import static org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.Unsigned.uint;
 import static org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.Unsigned.ulong;
 import static org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.Unsigned.ushort;
+import x.opcua.server.methods.BinarydataMethod;
 import x.opcua.server.methods.GenerateEventMethod;
 import x.opcua.server.methods.SqrtMethod;
 import x.opcua.server.types.CustomDataType;
@@ -131,6 +132,7 @@ public class ExampleNamespace extends ManagedNamespace {
     // Add the rest of the nodes
     addVariableNodes(folderNode);
     addSqrtMethod(folderNode);
+    addBinaryMethod(folderNode);
     addGenerateEventMethod(folderNode);
     addCustomDataTypeVariable(folderNode);
     addCustomObjectTypeAndInstance(folderNode);
@@ -504,6 +506,30 @@ public class ExampleNamespace extends ManagedNamespace {
     methodNode.setProperty(UaMethodNode.InputArguments, sqrtMethod.getInputArguments());
     methodNode.setProperty(UaMethodNode.OutputArguments, sqrtMethod.getOutputArguments());
     methodNode.setInvocationHandler(sqrtMethod);
+
+    getNodeManager().addNode(methodNode);
+
+    methodNode.addReference(new Reference(
+            methodNode.getNodeId(),
+            Identifiers.HasComponent,
+            folderNode.getNodeId().expanded(),
+            false
+    ));
+  }
+
+  private void addBinaryMethod(UaFolderNode folderNode) {
+    UaMethodNode methodNode = UaMethodNode.builder(getNodeContext())
+            .setNodeId(newNodeId("HelloWorld/binarydata(x)"))
+            .setBrowseName(newQualifiedName("binarydata(x)"))
+            .setDisplayName(new LocalizedText(null, "binarydata(x)"))
+            .setDescription(
+                    LocalizedText.english("Returns the correctly rounded positive square root of a double value."))
+            .build();
+
+    BinarydataMethod binaryMethod = new BinarydataMethod(methodNode);
+    methodNode.setProperty(UaMethodNode.InputArguments, binaryMethod.getInputArguments());
+    methodNode.setProperty(UaMethodNode.OutputArguments, binaryMethod.getOutputArguments());
+    methodNode.setInvocationHandler(binaryMethod);
 
     getNodeManager().addNode(methodNode);
 
